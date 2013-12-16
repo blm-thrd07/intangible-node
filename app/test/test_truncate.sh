@@ -6,7 +6,7 @@
 
 
 function Truncate_tbl(){
-  curl  -X GET  -H  'x-api-key: lnx1337' http://localhost:3000/db
+  curl  -X GET  -H  'x-api-key: lnx1337' http://sspdemo.cloudapp.net/db
 }
 
 function Create(){
@@ -19,19 +19,19 @@ function Create(){
 
 function Update(){
    echo "Actualizando Usuario"
-   curl  -X PUT  -H  'x-api-key: lnx1337'  -F nombre="UsuarioModificado$usr" -F email="emailModificado$usr@mail.com" http://localhost:3000/users/edit/$usr
+   curl  -X PUT  -H  'x-api-key: lnx1337'  -F nombre="UsuarioModificado$usr" -F email="emailModificado$usr@mail.com" http://sspdemo.cloudapp.net/users/edit/$usr
 }
 
 function ReadUsers(){
     echo "Listando Usuarios"
-    curl  -X GET  -H  'x-api-key: lnx1337' http://localhost:3000/users/list
+    curl  -X GET  -H  'x-api-key: lnx1337' http://sspdemo.cloudapp.net/users/list
 }
 
 function Delete(){
     echo "Borrando Usuario"
     for((usr=1;usr<=100;usr++))
 	  do
-       curl -X DELETE   -H  'x-api-key: lnx1337'   http://localhost:3000/users/$usr
+       curl -X DELETE   -H  'x-api-key: lnx1337'   http://sspdemo.cloudapp.net/users/$usr
       done 
 }
 
