@@ -55,7 +55,7 @@ exports.save=function(model,callback){
 
     db.select('id,nombre,apellido,email,password').where('email="'+model.email+'" and password="'+model.password+'"').get('tbl_users',function(err,data){
       
-      if(data.length>0){
+      if(data!=""){
             callback({response:"The username already exists"});
       
       }else{
