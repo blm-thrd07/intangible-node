@@ -62,7 +62,7 @@ exports.login=function(req,res){
 
 exports.list = function(req, res){
     model.findAll(function(callback){
-            if(callback.length>0){
+            if(callback!=""){
                  res.status(200).send(callback);
             }else{
             	 res.status(200).send({response:"No users"});
