@@ -22,7 +22,7 @@ exports.validateLogin=function(model,callback){
    db.select('id,email,password').where('email= "'+ model.email +'" and password="'+model.password+'"').get('tbl_users',function(err,data){     
                 
               if(!err){
-                 if(data.length>0){
+                 if(data!=""){
                  	 callback(data);
                  }else{
                  	callback("");
