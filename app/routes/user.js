@@ -85,9 +85,11 @@ exports.create=function(req,res){
   var email=req.body.email.trim();
   var password=req.body.password.trim();
   
-  if(nombre !=null && nombre.length>0  && apellido !=null && apellido.length>0  && email !=null  && email.length>0 && password !=null && password.length>0 ){
+  if(nombre !=null && nombre.length>0  && apellido !=null && apellido.length>0 
+  && email !=null  && email.length>0 && password !=null && password.length>0 ){
     if(validateEmail(email)){   
-      model.save({ nombre: nombre , apellido: apellido ,email:email ,password:password }, function(callback){  
+      model.save({ nombre: nombre , apellido: apellido ,email:email ,
+      password:password }, function(callback){  
         if(!callback.error){
           res.status(200).send(callback);
         }else{
