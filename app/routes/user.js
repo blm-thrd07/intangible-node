@@ -76,8 +76,8 @@ exports.view=function(req,res){
 // method: update 
 // request PUT /users/edit/:id
 // params:id user id
-// La funcion update nos permite actualizar un usuario enviando como parametros
-// los datos a actualizar es necesario el id de usuario. 
+// The update function allows us to update a user sending as parameters
+// Update the data to the user id is required.
 
 exports.update=function(req,res){
   // Take the id of the url sent by GET  var id=req.params.id; 
