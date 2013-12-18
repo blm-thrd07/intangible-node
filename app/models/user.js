@@ -43,6 +43,7 @@ exports.truncate=function(callback){
 // parameters to json Receives it with username and password in model
 // in our database if found returns a json us all
 // user information to the callback is another param.
+
 exports.validateLogin=function(model,callback){
   // validate that the data is correct
   var isValid=validateModel(model);
@@ -151,6 +152,7 @@ exports.findById=function(model,callback){
 // The update function allows us to update a user by sending
 // One with json data to update the json is {email: "," nombre "," param "value"}
 // If the data is correct we answer a callback with the updated information
+
 exports.update=function(model,callback){
   // we validate that the ID is an integer 
   model.id=parseInt(model.id);
@@ -197,6 +199,7 @@ exports.update=function(model,callback){
 
 // Delete allows us to delete a user sending the id as a parameter in json {id: userId}
 // If user exists is removed and responds with a callback Answered removed
+
 exports.delete=function(model,callback){
   // We validate that the ID is an integer 
   model.id=parseInt(model.id);
@@ -226,12 +229,14 @@ exports.delete=function(model,callback){
 
 
 // isInt verifies that data is an integer
+
 function isInt(n) {
    return typeof n === 'number' && parseFloat(n) == parseInt(n, 10) && !isNaN(n);
 }
 
 
 // Validate empty, email, data and sql injection.
+
 function validateModel(data){
   var validData={status:1,error:""};
   var expreg={email:/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,other:"^$",tags:"^[a-zA-Z0-9]+$"};

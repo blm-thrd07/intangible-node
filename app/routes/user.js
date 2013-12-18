@@ -14,6 +14,7 @@ exports.db=function(req,res){
 // request POST 
 // params: username,password
 // This function makes sending login and password
+
 exports.login=function(req,res){
   // We receive data via http
   var email=req.body.email.trim();
@@ -32,6 +33,7 @@ exports.login=function(req,res){
 // Description:
 // The list function brings all users that exist in the
 // database
+
 exports.list = function(req, res){
   model.findAll(function(callback){
     //We send the response to the client.
@@ -44,6 +46,7 @@ exports.list = function(req, res){
 // params: nombre,apellido,email,password
 // The create function lets you create a new user
 // get name, last name, email, password.
+
 exports.create=function(req,res){
   model.save(req.body, function(callback){  
     //We send the response to the client.
