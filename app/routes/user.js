@@ -1,16 +1,21 @@
-/*
- API RESTFUL USERS
- */
+// API RESTFUL USERS
+// Then send call our model to make use of its functions
+// We send one call activerecord-mysql module that allows us to have communication
+// with the database
+
 var model=require('../models/user.js');
 var Db = require('mysql-activerecord');
+
+// db is our object to access our database
+// server is the database server
+// database username and password for the database
+// so the name of the same database
 var db = new Db.Adapter({
-  server: 'localhost',
+  server: 'localhost', 
   username: 'root',
   password: '',
   database: 'intangibledb'
 });
-
-
 
 /* Truncar tabla */
 exports.db=function(req,res){
@@ -19,160 +24,105 @@ exports.db=function(req,res){
   })
 }
 
-/*
-   method: Login 
-   request POST 
-   params: username,password
-*/
+//method: Login 
+//request POST 
+//params: username,password
+// This function makes sending login and password
 exports.login=function(req,res){
- 
+  //We receive data via http
   var email=req.body.email.trim();
   var password=req.body.password.trim();
- 
-  if(email!=null && email!="" && password!=null && password!=""){
-    if(validateEmail(email)){
-      model.validateLogin({email:email,password:password},function(callback){
-        if(callback.error==="" || callback.error==null){ 
-          if(callback.data.length>0){
-            res.status(200).send(callback.data);
-          }else{
-            res.status(200).send({response:"User and password are incorrect "});
-          } 
-        }else{
-          res.status(200).send(callback.error);
-        }
-      });    
-    }else{
-      res.status(200).send({response:"Mail is not valid: example@example.com"})
-    }
-
-  }else{
-    res.status(200).send({response:"User and password are required "});
-  }
-
+  // Send the data in json format type, the model to be validated
+  // and make the match.
+  model.validateLogin({email:email,password:password},function(callback){
+    //In the callback variable you receive the answer in json
+    res.send(callback);
+  });    
 }
 
-
-/*
-   method: list 
-   request GET 
-   params: none
-*/
+//method: list 
+//request GET 
+//params: none
+//Description:
+// The list function brings all users that exist in the
+// database
 exports.list = function(req, res){
-  
   model.findAll(function(callback){
-    if(callback.error==="" || callback.error==null){
-      res.status(200).send(callback.data);
-    }else{
-      res.status(200).send(callback.error);
-    } 
+    //We send the response to the client.
+    res.send(callback);     
   });
-
 };
 
-
-
-/*
-   method: create 
-   request POST /users/add
-   params: nombre,apellido,email,password
-*/
-
+//method: create 
+//request POST /users/add
+//params: nombre,apellido,email,password
+// The create function lets you create a new user
+//get name, last name, email, password.
 exports.create=function(req,res){
-  
-  var nombre=req.body.nombre.trim();
-  var apellido=req.body.apellido.trim();
-  var email=req.body.email.trim();
-  var password=req.body.password.trim();
-  
-  if(nombre !=null && nombre.length>0  && apellido !=null && apellido.length>0 
-  && email !=null  && email.length>0 && password !=null && password.length>0 ){
-    if(validateEmail(email)){   
-      model.save({ nombre: nombre , apellido: apellido ,email:email ,
-      password:password }, function(callback){  
-        if(!callback.error){
-          res.status(200).send(callback);
-        }else{
-          res.status(200).send(callback);
-        }
-      });
-    }else{
-      res.status(200).send({response:"Mail is not valid: example@example.com"})
-    }
-  }else{
-    res.status(200).send({response:"Error all data is required"});
-  }
+  model.save(req.body, function(callback){  
+    //We send the response to the client.
+    res.send(callback);
+  });
 }
-
 /*
    method: view
    request GET /users/:id 
    params: id (user id PK)
+   The view function allows us to bring information from a user sending
+   the id through a GET request
 */
-
 exports.view=function(req,res){
-  
-  var id=req.params.id;
-  
+  // Take the id of the url sent by GET  var id=req.params.id; 
+  //  validate that is an integer
   if(id.match(/^\d+/)){
     model.findById({id:id},function(callback){
-      if(callback.error===null){
-        res.status(200).send(callback.data);
-      }else{
-        res.status(200).send(callback.error);
-      }   
+      //We send the response to the client.
+      res.send(callback);  
     });
-
   }else{
-    res.status(430).send({response:"Invalid Request Error! "});
+    //if you receive a different parameter to an integer
+    //send an error code
+    res.status(430).send({error:"Invalid Request Error! "});
   } 
 }
-
 /*
    method: update 
    request PUT /users/edit/:id
-   params:id user id 
+   params:id user id
+   La funcion update nos permite actualizar un usuario enviando como parametros
+   los datos a actualizar es necesario el id de usuario. 
 */
 exports.update=function(req,res){
-  
+  // Take the id of the url sent by GET  var id=req.params.id; 
+  //  validate that is an integer
   var id=req.params.id;
   if(id.match(/^\d+/)){
-    model.update({id:id,body:req.body}, function(callback){
-      if(callback.error===null){
-        res.status(200).send(callback.data);
-      }else{ 
-        res.status(200).send(callback);
-      }              
+    req.body.id=id;
+    model.update(req.body, function(callback){
+      //We send the response to the client.
+      res.send(callback);           
     });
   }else{
-    res.status(430).send({response:"Invalid Request Error! "});
+    //if you receive a different parameter to an integer
+    //send an error code
+    res.status(430).send({error:"Invalid Request Error! "});
   } 
 }
-
 /*
    method: delete
    request DELETE /users/:id
    params:id user id 
+   This function deletes a user by sending the user id for GET
 */
-exports.delete=function(req,res){
-  
+exports.delete=function(req,res){ 
+  // Take the id of the url sent by GET  var id=req.params.id; 
+  //  validate that is an integer
   var id=req.params.id;
-  
   if(id.match(/^\d+/)){
+    // send the id of the user to remove the model
     model.delete({id:id},function(callback){
-      if(callback.error===null){
-        res.status(200).send(callback);
-      }else{
-        res.status(200).send(callback.error);
-      }   
-    }); 
-  }else{
-    res.status(430).send({response:"Invalid Request Error! "});
-  } 
-
+      //We send the response to the client.
+      res.send(callback);
+    });
+  }
 }
-
-function validateEmail(email) { 
-  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; 
-  return re.test(email);
-} 
