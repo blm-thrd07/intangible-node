@@ -72,7 +72,7 @@ exports.view=function(req,res){
   }else{
     // if you receive a different parameter to an integer
     // send an error code
-    res.status(430).send({error:"Invalid Request Error! "});
+    res.status(430).send([{errors:"Error: Invalid Request"}]);
   } 
 }
 
@@ -95,7 +95,7 @@ exports.update=function(req,res){
   }else{
     // if you receive a different parameter to an integer
     // send an error code
-    res.status(430).send({error:"Invalid Request Error! "});
+    res.status(430).send([{errors:"Error: Invalid Request"}]);
   } 
 }
 
@@ -114,5 +114,9 @@ exports.delete=function(req,res){
       // We send the response to the client.
       res.send(callback);
     });
+  }else{
+    // if you receive a different parameter to an integer
+    // send an error code
+    res.status(430).send([{errors:"Error: Invalid Request"}]);
   }
 }
