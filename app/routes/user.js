@@ -80,7 +80,7 @@ exports.view=function(req,res){
 // request PUT /users/edit/:id
 // params:id user id
 // The update function allows us to update a user sending as parameters
-// Update the data to the user id is required.
+// Update the data to the user id is required. 
 
 exports.update=function(req,res){
   // Take the id of the url sent by GET  var id=req.params.id; 

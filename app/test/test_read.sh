@@ -6,6 +6,6 @@
 
 function ReadUsers(){
     echo "Listando Usuarios"
-    curl  -X GET  -H  'x-api-key: lnx1337' http://sspdemo.cloudapp.net/users/list
+    curl  -X GET  -H  'x-api-key: lnx1337' http://localhost:3000/users/list
 }
 ReadUsers

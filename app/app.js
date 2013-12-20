@@ -34,7 +34,7 @@ app.all('/*', function(req, res, next) {
   //IRL, lookup in a database or something
   if (typeof req.headers['x-api-key'] !== 'undefined' && req.headers['x-api-key'] === 'lnx1337') {
     next();
-  } else {
+  }else {
     res.status(401).send({error: "Bad or missing app identification header"});
   }
 });

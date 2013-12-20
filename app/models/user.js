@@ -1,7 +1,6 @@
 // This file is the model, and has features that allow us to communicate with 
 // mysql database here consultations conducted validate the input data.
 
-
 // Include activerecord-mysql module which allows us to communicate with the database Through 
 // his meincluimos activerecord-mysql module which allows us to communicate with the database through his methods
 
@@ -28,6 +27,7 @@ var db = new Db.Adapter({
 
 // The function allows us to truncate the table empty tbl users
 // Returns a callback with the response.
+
 exports.truncate=function(callback){
   // We send the query to the db.query
   db.query('truncate table tbl_users', function(err, results) { 
@@ -55,10 +55,11 @@ exports.validateLogin=function(model,callback){
       //login is correct       
       if(err==null){ 
         if(data.length>0){
-          callback(data);
+          data[0].response='OK';
+          callback(data[0]);
         }else{
           // If we send wrong user credentials error.
-          callback({data:"",error:"User and password are incorrect "});
+          callback([{errors:"User and password are incorrect"}]);
         }
       }else{
           // If there was an error in the query sent an error.
@@ -67,7 +68,7 @@ exports.validateLogin=function(model,callback){
     });
   }else{
     // If the input data is incorrect send the error.
-    callback({error:isValid.error});
+    callback(isValid);
   } 
 }
 
@@ -99,13 +100,14 @@ exports.save=function(model,callback){
         +'" and password="'+model.password+'"').get('tbl_users',function(err,data){
         // If the user exists send alert
         if(data!=""&& data!=null){
-          callback({data:"",error:"The username already exists"});  
+          callback([{errors:"Error: The username already exists"}]);  
         }else{
           // If the store does not exist.
           db.insert('tbl_users', { nombre: model.nombre , apellido: model.apellido,
             email:model.email ,password:model.password }, function(err, data){
             if(err==null){
               // Answer ok
+              data.response="OK";
               callback(data);
             }else{
               // If there was an error in the query sent an error
@@ -116,7 +118,7 @@ exports.save=function(model,callback){
       });
     }else{
     // If the input data is incorrect send the error
-    callback({error:isValid.error});
+    callback(isValid);
     }     
 }
 
@@ -133,10 +135,11 @@ exports.findById=function(model,callback){
         if(err==null){
           // if the response contains the data sent
           if(data!=null && data!=""){
+            data[0].response="OK";
             callback(data);
           }else{
             // if the id is not found the user does not exist and send response
-            callback({error:"User Not exist"})
+            callback([{errors:"Error: User Not exist"}]);
           }
         }else{
           // If there was an error in the query sent an error
@@ -145,7 +148,7 @@ exports.findById=function(model,callback){
     });
   }else{
     // If the user id is different from a number sent Error
-    callback({error:"The userid is invalid"});
+    callback([{errors:"Error: The userid is invalid"}]);
   }
 }
 
@@ -173,7 +176,7 @@ exports.update=function(model,callback){
                   function(err,result){
                     var response={};
                     response.data=result;
-                    response.data[0].update="ok";
+                    response.data[0].response="OK";
                     response.data[0].error=err;
                     callback(response.data);
                 });
@@ -184,16 +187,16 @@ exports.update=function(model,callback){
             });
           }else{
             // If the input data is incorrect send an error
-            callback({error:isValid.error});
+            callback(isValid);
           } 
         }else{
           // if the submitted user id does not exist, send the error
-          callback({error:"User not found"});
+          callback([{errors:"Error: User Not exist"}]);
         }   
     });
   }else{
       // If the user id is different from a number dispatched Error
-      callback({error:"The userid is invalid"});
+      callback([{errors:"Error: The userid is invalid"}]);
   }
 }
 
@@ -210,20 +213,20 @@ exports.delete=function(model,callback){
         // if the user exists send query to delete
         db.where({ id: model.id }).delete('tbl_users', function(err){
           if(err==null){
-           callback({data:"Deleted"});  
+           callback([{data:"Deleted",response:"OK"}]);  
           }else{
             // If the input data is incorrect send an error
-            callback({error:err});
+            callback([{errors:err}]);
           }
         });
       }else{
         // if the submitted user id does not exist, send the error
-        callback({error:"User not found"});
+        callback([{errors:"Error: User Not exist"}]);
       }   
     });
   }else{
     // If the user id is different from a number dispatched Error
-    callback({error:"The userid is invalid"});
+    callback([{errors:"Error: The userid is invalid"}]);
   }
 }
 
@@ -238,26 +241,30 @@ function isInt(n) {
 // Validate empty, email, data and sql injection.
 
 function validateModel(data){
-  var validData={status:1,error:""};
+  var validData={status:1,errors:[]};
   var expreg={email:/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,other:"^$",tags:"^[a-zA-Z0-9]+$"};
   for(i in data){
     var key = i;
-    if(key==='email'){
-      if(!data[key].match(expreg.email)){
-        validData.status=0;
-        validData.error+=" Error: email is invalid.";
-      }
-    } 
-    if(key!='email' && key != 'id'){
+
+    if (key != 'id') {   
       if(data[key].match(expreg.other)){
         validData.status=0;
-        validData.error+= " Error:"+ key +" is required.";
-      }
-      if(!data[key].match(expreg.tags)){
-        console.log("entro");
-        validData.status=0;
-        validData.error+="Error: "+key+" contains invalid characters.";
-      } 
+        validData.errors.push({"error":"Error: "+ key +" is required"});
+      }else{
+        
+
+        if(key==='email') {
+          if(!data[key].match(expreg.email)){
+            validData.status=0;
+            validData.errors.push({"error":"Error: email is invalid"});
+          }
+        } 
+        
+        if(!data[key].match(expreg.tags) && key!='email'){
+           validData.status=0;
+           validData.errors.push({"error": "Error: "+key+" contains invalid characters"});
+        }
+      }  
     }
   }
   return validData;
