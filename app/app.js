@@ -49,7 +49,9 @@ app.get('/users/list', user.list);
 app.post('/users/add',user.create);
 app.put('/users/edit/:id',user.update);
 app.get('/users/:id',user.view);
+app.post('/users/:id',user.delete);
 app.delete('/users/:id',user.delete);
+
 
 
 http.createServer(app).listen(app.get('port'), function(){
