@@ -3,12 +3,9 @@
 //script is using mocha
 //$ mocha testModelMocha.js --reporter nyan --timeout 5000 
 
-
-
 var should = require('chai').should();
 var assert = require("assert")
 var model =require('../models/user.js');
-
 
 //Model Save In this series we test methods to save a user, sending null data, invalid data,
 //incorrect data
@@ -20,10 +17,10 @@ describe('Model Save user', function() {
 
   it('Save user sending the correct parameters', function(done) {
     model.save({
-      nombre:"usernametestingintangible",
+      nombre:"nuevousuariointangible",
       apellido: "apellidotestingintangibleeee", 
-      email:"intangible666@testing.com",
-      password:"passwordTestingintangible"
+      email:"nuevousuariointangible666@testing.com",
+      password:"passwordTestingin"
     },
     function(callback){
      //Because of that the user is saved successfully received a response OK 
@@ -39,8 +36,8 @@ describe('Model Save user', function() {
     model.save({ 
       nombre:"usernametesting" , 
       apellido: "apellidotesting", 
-      email:"email4@testing.com" ,
-      password:"passwordTesting" 
+      email:"nuevousuariointangible666@testing.com" ,
+      password:"passwordTestingin" 
     },
     function(callback) {
       //As there the user should receive an error, this user has already used
@@ -179,14 +176,14 @@ describe('Model Authentication', function() {
   it('#User Login correct', function(done) {
     //This method makes a correct login
     model.validateLogin({
-      email:"emailModificado1@mail.com",
-      password:"password1"
+      email:"nuevousuariointangible666@testing.com",
+      password:"passwordTestingin"
     },
     function(callback) {
       //if the expected errors are correct the test is successful
       var isCorrect = callback.should.have.property('response','OK');
       if (isCorrect) {
-        done();	
+        done(); 
       }
     });
 
@@ -203,7 +200,7 @@ describe('Model Authentication', function() {
       //if the expected errors are correct the test is successful
       var isCorrect = callback[0].should.have.property('errors', 'User and password are incorrect');      
       if (isCorrect) {
-        done();	
+        done(); 
       } 
     });
 
@@ -219,7 +216,7 @@ describe('Model Authentication', function() {
     //if the expected errors are correct the test is successful  
     var isCorrect = callback.errors[0].should.have.property('error', 'Error: email is required');        
       if (isCorrect) {
-        done();	
+        done(); 
       }     
     });
 
@@ -237,7 +234,7 @@ describe('Model Authentication', function() {
                       callback.errors[1].should.have.property('error', 'Error: password is required')
                       );    
       if (isCorrect) {
-        done();	
+        done(); 
       }           
     });
   });
@@ -253,7 +250,7 @@ describe('Model Authentication', function() {
                        callback.errors[1].should.have.property('error', 'Error: password contains invalid characters')
                       );
       if (isCorrect) {
-        done();	
+        done(); 
       }               
     });
   });
@@ -271,7 +268,7 @@ describe('Model ListAll ', function() {
       if (isCorrect) {
         done();
       }
-	  });
+    });
   });
 
 });
@@ -293,9 +290,9 @@ describe('Model user findById ', function() {
         callback[0].should.have.property('email') 
       );   
       if (isCorrect) {
-        done();	
+        done(); 
       } 
-  	});
+    });
   });
    
   it('findById sending a user id that does not exist', function(done) {
@@ -307,9 +304,9 @@ describe('Model user findById ', function() {
       //if the expected errors are correct the test is successful
       var isCorrect = callback[0].should.have.property('errors','Error: User Not exist');
       if (isCorrect) {
-        done();	
+        done(); 
       }   
-  	});
+    });
   });
    
   //sent an invalid id
@@ -321,9 +318,9 @@ describe('Model user findById ', function() {
       //if the expected errors are correct the test is successful
       var isCorrect = callback[0].should.have.property('errors','Error: The userid is invalid');  
       if (isCorrect) {
-        done();	
+        done(); 
       }   
-  	})
+    })
   });
   
   //tried with sql injection
@@ -335,9 +332,9 @@ describe('Model user findById ', function() {
       //if the expected errors are correct the test is successful
       var isCorrect = callback[0].should.have.property('errors','Error: The userid is invalid');
       if (isCorrect) {
-        done();	
+        done(); 
       }   
-  	})
+    })
   });
 
 });
@@ -349,7 +346,7 @@ describe('Model update user', function() {
   //exists otherwise send us a unexpected error and the test may not continue
   it('update correct all data', function(done) {
     model.update({
-      id:2,
+      id:1,
       nombre:"nombretest",
       email:'emailModificado1@mail.com'
     },
@@ -357,7 +354,7 @@ describe('Model update user', function() {
       //if everything is fine received a response OK
       var isCorrect = callback[0].should.have.property('response','OK');
       if (isCorrect) {
-        done();	
+        done(); 
       }  
     });
   });
@@ -373,9 +370,9 @@ describe('Model update user', function() {
       //if the expected errors are correct the test is successful
       var isCorrect = callback[0].should.have.property('errors','Error: User Not exist');
       if (isCorrect) {
-        done();	
+        done(); 
       }   
-  	})
+    })
   });
 
   //tried with a wrong id
@@ -386,15 +383,15 @@ describe('Model update user', function() {
     function(callback) {
       var isCorrect = callback[0].should.have.property('errors','Error: The userid is invalid');
       if (isCorrect) { 
-        done();	
+        done(); 
       }   
-  	})
+    })
   });
   
   //tried with sql injection
   it('update user send SQLinjection', function(done) {
     model.update({
-      id:2,
+      id:1,
       nombre:"'--",
       apellido: "' or '1",
       email:"//",
@@ -402,14 +399,14 @@ describe('Model update user', function() {
     },
     function(callback) {
       //if the expected errors are correct the test is successful
-   	  var isCorrect = (
+      var isCorrect = (
         callback.errors[0].should.have.property('error', 'Error: nombre contains invalid characters') &&
         callback.errors[1].should.have.property('error', 'Error: apellido contains invalid characters') &&
         callback.errors[2].should.have.property('error', 'Error: email is invalid') &&
         callback.errors[3].should.have.property('error', 'Error: password contains invalid characters')
       );
       if (isCorrect) {
-            done();	
+            done(); 
       }   
     });
   });
@@ -417,7 +414,7 @@ describe('Model update user', function() {
   //in the following methods send null data to test which returns errors
   it('update user send name null', function(done) {
     model.update({
-      id:2,nombre:"",
+      id:1,nombre:"",
       apellido: "testApellido",
       email:"test@email.com",
       password:"lamisma" 
@@ -425,15 +422,15 @@ describe('Model update user', function() {
     function(callback) {
       //if the expected errors are correct the test is successful 
       var isCorrect = callback.errors[0].should.have.property('error', 'Error: nombre is required');
-	    if (isCorrect) {
-	      done();	
-	    }   
-	  });
+      if (isCorrect) {
+        done(); 
+      }   
+    });
   });
 
   it('update user send apellido null', function(done) {
-	  model.update({
-      id:2,
+    model.update({
+      id:1,
       nombre:"nombretest",
       apellido: "",
       email:"test@email.com",
@@ -442,15 +439,15 @@ describe('Model update user', function() {
     function(callback) {
       //if the expected errors are correct the test is successful
       var isCorrect = callback.errors[0].should.have.property('error', 'Error: apellido is required');   
-	    if (isCorrect) {
-	      done();	
-	    }   
-	  });
+      if (isCorrect) {
+        done(); 
+      }   
+    });
   });
 
-	it('update user send email null', function(done) {
-	  model.update({
-      id:2,
+  it('update user send email null', function(done) {
+    model.update({
+      id:1,
       nombre:"nombretest",
       apellido: "apellidotest",
       email:"",
@@ -458,16 +455,16 @@ describe('Model update user', function() {
     },
     function(callback) {
       //if the expected errors are correct the test is successful
-	   	var isCorrect = callback.errors[0].should.have.property('error', 'Error: email is required'); 
+      var isCorrect = callback.errors[0].should.have.property('error', 'Error: email is required'); 
       if (isCorrect) {
-	      done();	
-	    }   
-	  });
-	});
+        done(); 
+      }   
+    });
+  });
 
-	it('update user send password null', function(done) {
-	  model.update({
-      id:2,
+  it('update user send password null', function(done) {
+    model.update({
+      id:1,
       nombre:"nombretest",
       apellido: "testApellido",
       email:"test@email.com",
@@ -476,11 +473,11 @@ describe('Model update user', function() {
     function(callback) {
       //if the expected errors are correct the test is successful
       var isCorrect = callback.errors[0].should.have.property('error', 'Error: password is required');
-	   	if (isCorrect) {
-	      done();	
-	    }   
-	  });
-	});
+      if (isCorrect) {
+        done(); 
+      }   
+    });
+  });
 
 });
 
@@ -490,9 +487,9 @@ describe('Model user delete ', function() {
   
   //to remove a user successfully send an id there otherwise we will send an 
   //unexpected error and not be able to continue the test
-	it('delete correct', function(done) {
+  it('delete correct', function(done) {
     model.delete({
-    id:92
+    id:1
     },
     function(callback) {
       var isCorrect = (
@@ -500,13 +497,13 @@ describe('Model user delete ', function() {
         callback[0].should.have.property('data', 'Deleted')
       );
       if (isCorrect) {
-	      done();
-	    } 
+        done();
+      } 
     });
-	});
+  });
 
   //tried sending an id that does not exist
-	it('delete incorrect sending a user id that does not exist', function(done) {
+  it('delete incorrect sending a user id that does not exist', function(done) {
     model.delete({
       id:1337
     },
@@ -514,7 +511,7 @@ describe('Model user delete ', function() {
       //if the expected errors are correct the test is successful
       var isCorrect = callback[0].should.have.property('errors','Error: User Not exist');
       if (isCorrect) {
-        done();	
+        done(); 
       }
     });
   });
@@ -527,9 +524,9 @@ describe('Model user delete ', function() {
       //if the expected errors are correct the test is successful
       var isCorrect = callback[0].should.have.property('errors','Error: The userid is invalid');
       if (isCorrect) {
-        done();	
+        done(); 
       }   
-  	})
+    })
   });
 
   //try sending sqlinjection
@@ -541,9 +538,9 @@ describe('Model user delete ', function() {
       //if the expected errors are correct the test is successful
       var isCorrect = callback[0].should.have.property('errors','Error: The userid is invalid');
       if (isCorrect) {
-        done();	
+        done(); 
       }   
-  	})
+    })
   });
 
 });

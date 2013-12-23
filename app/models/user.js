@@ -18,13 +18,11 @@ var db = new Db.Adapter({
   database: 'intangibledb'
 });
 
-
 // Model data
 // @nombre varchar
 // @apellido varchar
 // @email varchar
 // @password varchar
-
 
 // The function allows us to truncate the table empty tbl users
 // Returns a callback with the response.
