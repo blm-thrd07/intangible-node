@@ -14,7 +14,7 @@ var Db = require('mysql-activerecord');
 var db = new Db.Adapter({
   server: 'localhost', 
   username: 'root',
-  password: '',
+  password: 'D3c3p710n',
   database: 'intangibledb'
 });
 
