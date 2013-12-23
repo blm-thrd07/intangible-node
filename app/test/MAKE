@@ -1,0 +1,2 @@
+mocha testApiMocha.js --reporter nyan --timeout 5000 
+mocha testModelMocha.js --reporter nyan --timeout 5000 
